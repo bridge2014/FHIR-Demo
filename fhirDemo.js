@@ -30,6 +30,11 @@ fhirDemo.UI=function(){
         div0.appendChild(div);
         div.innerHTML='<p style="color:navy">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button> or load it from a <i style="color:red">.hl7</i> file:</p>';
         div.innerHTML+='<textarea style="width:100%;height:200" id="divFHIRdemo_textArea">';
+        var ta = document.getElementById('divFHIRdemo_textArea');
+        ta.onkeyup=function(ev){
+            //if(ev.keyCode==13){fhirDemo.toJSON()} // onlu when enter is pressed
+            fhirDemo.toJSON(); // everytime a key is pressed
+        }
         var upload =function(x){
             var ta = document.getElementById('divFHIRdemo_textArea');
             ta.value=x.result;
