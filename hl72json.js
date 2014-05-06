@@ -15,14 +15,14 @@ hl72json=function(txt){
 		y[x[0]] = x.slice(1);
 		return y;
 	})
-	// look for ZGOV segments and associate them to the segment object
+	// look for ZGOV segments and associate them to the preceding segment object
 	for(i=txt.length-1 ; i>0 ; i--){
 		if(Object.getOwnPropertyNames(txt[i])[0]==="ZGOV"){
 			txt[i].ZGOV = txt[i].ZGOV.map(function(z){
 				z = z.split('^');
 				return {
 					operator:z[0],
-					user:z[1],
+					username:z[1],
 					state:z[2]
 				}
 			})
