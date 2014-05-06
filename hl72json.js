@@ -18,6 +18,14 @@ hl72json=function(txt){
 	// look for ZGOV segments and associate them to the segment object
 	for(i=txt.length-1 ; i>0 ; i--){
 		if(Object.getOwnPropertyNames(txt[i])[0]==="ZGOV"){
+			txt[i].ZGOV = txt[i].ZGOV.map(function(z){
+				z = z.split('^');
+				return {
+					operator:z[0],
+					user:z[1],
+					state:z[2]
+				}
+			})
 			txt[i-1]['@gov']=txt[i]['ZGOV'];
 			txt.splice(i,1);
 		}
