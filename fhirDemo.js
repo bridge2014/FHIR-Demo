@@ -28,7 +28,7 @@ fhirDemo.UI=function(){
         // input div
         var div = document.createElement('div');
         div0.appendChild(div);
-        div.innerHTML='<p style="color:navy">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoGov_button">demo Gov</button>, or load it from a <i style="color:red">.hl7</i> file:</p>';
+        div.innerHTML='<p style="color:navy">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color:red">.hl7</i> file:</p>';
         div.innerHTML+='<textarea style="width:100%;height:200" id="divFHIRdemo_textArea">';
         var ta = document.getElementById('divFHIRdemo_textArea');
         ta.onkeyup=function(ev){
