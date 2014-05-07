@@ -43,9 +43,15 @@ fhirDemo.UI=function(){
         var divUpload = document.createElement('div');div.appendChild(divUpload);
         jmat.inputFileTxt(upload,divUpload,'','accept=".hl7"');
         var bt = document.getElementById('FHIRdemo_button');
-        bt.onclick=function(){
+        bt.onclick=function(){ // "demo" button
             var ta = document.getElementById('divFHIRdemo_textArea');
             ta.value="MSH|^~\&|LAB||CDB||||ORU^R01|K172|P\nPID|||PATID1234^5^M11||Jones^William||19610613|M\nOBR||||80004^Electrolytes\nOBX|1|ST|84295^Na||150|mmol/l|136-148|Above high normal|||Final results\nOBX|2|ST|84132^K+||4.5|mmol/l|3.5-5|Normal|||Final results\nOBX|3|ST|82435^Cl||102|mmol/l|94-105|Normal|||Final results\nOBX|4|ST|82374^CO2||27|mmol/l|24-31|Normal|||Final results";
+            fhirDemo.toJSON();
+        }
+        var btZ = document.getElementById('FHIRdemoZGOV_button');
+        btZ.onclick=function(){ // "with ZGOV" button
+            var ta = document.getElementById('divFHIRdemo_textArea');
+            ta.value="MSH|^~\&|LAB||CDB||||ORU^R01|K172|P\nZGOV|read^username1^all|write^username1^self\nPID|||PATID1234^5^M11||Jones^William||19610613|M\nOBR||||80004^Electrolytes\nOBX|1|ST|84295^Na||150|mmol/l|136-148|Above high normal|||Final results\nOBX|2|ST|84132^K+||4.5|mmol/l|3.5-5|Normal|||Final results\nOBX|3|ST|82435^Cl||102|mmol/l|94-105|Normal|||Final results\nOBX|4|ST|82374^CO2||27|mmol/l|24-31|Normal|||Final results";
             fhirDemo.toJSON();
         }
         // Conversion to JSON
