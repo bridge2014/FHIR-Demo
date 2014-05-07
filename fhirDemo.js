@@ -17,7 +17,7 @@ fhirDemo.toJSON=function(){ // convert text area HL7 text into JSON
     var hl7_txt = document.getElementById('divFHIRdemo_textArea').value;
     var hl7_json = hl72json(hl7_txt);
     var div = document.getElementById('divFHIRdemo_JSON');
-    div.innerHTML='<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre>'+JSON.stringify(hl7_json,undefined,1)+'</pre>';
+    div.innerHTML='<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre style="color:green">'+JSON.stringify(hl7_json,undefined,1)+'</pre>';
     4
 }
 
@@ -29,7 +29,7 @@ fhirDemo.UI=function(){
         var div = document.createElement('div');
         div0.appendChild(div);
         div.innerHTML='<p style="color:navy">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color:red">.hl7</i> file:</p>';
-        div.innerHTML+='<textarea style="width:100%;height:200" id="divFHIRdemo_textArea">';
+        div.innerHTML+='<textarea style="width:100%;height:200;color:blue" id="divFHIRdemo_textArea">';
         var ta = document.getElementById('divFHIRdemo_textArea');
         ta.onkeyup=function(ev){
             //if(ev.keyCode==13){fhirDemo.toJSON()} // onlu when enter is pressed
