@@ -55,9 +55,9 @@ fhirDemo.UI = function () {
                     mlli.onclick = function (evt) {
                         var message = JSON.parse(evt.target.innerText);
                         fhirJsonParser(message, function (err, m) {
-                            console.log(m);
                             var ta = document.getElementById('divFHIRdemo_textArea');
                             ta.value = m;
+                            fhirDemo.toJSON();
                         });
                     };
                     ml.appendChild(mlli);
