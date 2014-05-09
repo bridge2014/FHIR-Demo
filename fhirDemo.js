@@ -5,6 +5,7 @@ var FHIR = require("fhir");
 var fhir = new FHIR({
     url: "https://fhir.herokuapp.com",
 });
+fhir.credentials("username1", "username1");
 
 // FHIR-Demo
 
