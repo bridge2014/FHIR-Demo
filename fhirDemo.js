@@ -168,14 +168,19 @@ fhirJsonParser = function (mshSegment, callback) {
             messageSegment += segment.fields.join("|");
          // Find and embed governance.
             fhir.govread(segment._type, segment._lid, function (err, gov) {
-                if (gov.length > 0) {
-                    messageSegment += "\n";
-                    messageSegment += "ZGOV";
-                    gov.forEach(function (rule) {
-                        messageSegment += "|" + rule.operator + "^" + rule.username + "^" + rule.state;
-                    });
+                if (err) {
+                 // Ignore errors, probably just missing permission.
+                    callback(null, messageSegment);
+                } else {
+                    if (gov.length > 0) {
+                        messageSegment += "\n";
+                        messageSegment += "ZGOV";
+                        gov.forEach(function (rule) {
+                            messageSegment += "|" + rule.operator + "^" + rule.username + "^" + rule.state;
+                        });
+                    }
+                    callback(err, messageSegment);
                 }
-                callback(err, messageSegment);
             });
         }, function(err, segmentMessages) {
             callback(err, segmentMessages.join("\n"));
