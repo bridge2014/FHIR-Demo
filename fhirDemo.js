@@ -28,7 +28,7 @@ fhirDemo.toJSON = function () { // convert text area HL7 text into JSON
         saveBtn.onclick = function () {
             var doc = document.getElementById("FHIRdemo_doc").innerText;
             doc = JSON.parse(doc);
-            hl7JsonParser(doc);
+            fhirHl7Parser(doc);
         };
     }
 };
@@ -51,12 +51,20 @@ fhirDemo.UI = function () {
             if (resources.length > 0) {
                 resources.forEach(function (resource) {
                     mlli = document.createElement("li");
-                    mlli.innerHTML = JSON.stringify(resource);
+                    mlli.innerText = JSON.stringify(resource);
+                    mlli.onclick = function (evt) {
+                        var message = JSON.parse(evt.target.innerText);
+                        fhirJsonParser(message, function (err, m) {
+                            console.log(m);
+                            var ta = document.getElementById('divFHIRdemo_textArea');
+                            ta.value = m;
+                        });
+                    };
                     ml.appendChild(mlli);
                 });
             } else {
                 mlli = document.createElement("li");
-                mlli.innerHTML = "No messages found.";
+                mlli.innerText = "No messages found.";
                 ml.appendChild(mlli);
             }
         });
@@ -91,7 +99,7 @@ fhirDemo.UI = function () {
     }
 };
 
-hl7JsonParser = function (obj) {
+fhirHl7Parser = function (obj) {
     var messageId;
  // Generate random message ID.
     messageId = Math.random().toString(36).substr(2, 9);
@@ -125,5 +133,36 @@ hl7JsonParser = function (obj) {
         } else {
             console.log("Documents were persisted:", res);
         }
+    });
+};
+
+fhirJsonParser = function (mshSegment, callback) {
+ // Find other segments of the message based on mshid.
+    fhir.search({
+        mshid: mshSegment.mshid
+    }, function (err, segments) {
+        segments = segments.filter(function (segment) {
+         // Ignore MSH segment duplicate.
+            return segment._type !== "MSH";
+        });
+     // Prepend original MSH segment (it should be first).
+        segments.unshift(mshSegment)
+        async.map(segments, function (segment, callback) {
+            var messageSegment = segment._type + "|";
+            messageSegment += segment.fields.join("|");
+         // Find and embed governance.
+            fhir.govread(segment._type, segment._lid, function (err, gov) {
+                if (gov.length > 0) {
+                    messageSegment += "\n";
+                    messageSegment += "ZGOV";
+                    gov.forEach(function (rule) {
+                        messageSegment += "|" + rule.operator + "^" + rule.username + "^" + rule.state;
+                    });
+                }
+                callback(err, messageSegment);
+            });
+        }, function(err, segmentMessages) {
+            callback(err, segmentMessages.join("\n"));
+        });
     });
 };
