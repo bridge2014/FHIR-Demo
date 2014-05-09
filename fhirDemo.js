@@ -90,9 +90,10 @@ refreshMessageList = function () {
         if (resources.length > 0) {
             resources.forEach(function (resource) {
                 mlli = document.createElement("li");
-                mlli.innerText = JSON.stringify(resource);
+                mlli.dataset.segment = JSON.stringify(resource);
+                mlli.innerText = resource.mshid;
                 mlli.onclick = function (evt) {
-                    var message = JSON.parse(evt.target.innerText);
+                    var message = JSON.parse(evt.target.dataset.segment);
                     fhirJsonParser(message, function (err, m) {
                         var ta = document.getElementById('divFHIRdemo_textArea');
                         ta.value = m;
