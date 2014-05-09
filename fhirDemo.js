@@ -41,8 +41,25 @@ fhirDemo.UI = function () {
         // input div
         var div = document.createElement('div');
         div0.appendChild(div);
-        div.innerHTML = '<p style="color: navy;">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color: red;">.hl7</i> file:</p>';
+        div.innerHTML = '<p style="color: navy;">Message list:</p><ul id="divFHIRdemo_messageList"></ul><p style="color: navy;">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color: red;">.hl7</i> file:</p>';
         div.innerHTML += '<textarea style="width: 100%; height: 200px; color: blue;" id="divFHIRdemo_textArea">';
+        var ml = document.getElementById('divFHIRdemo_messageList');
+        fhir.search({
+            _type: "MSH"
+        }, function (err, resources) {
+            var mlli;
+            if (resources.length > 0) {
+                resources.forEach(function (resource) {
+                    mlli = document.createElement("li");
+                    mlli.innerHTML = JSON.stringify(resource);
+                    ml.appendChild(mlli);
+                });
+            } else {
+                mlli = document.createElement("li");
+                mlli.innerHTML = "No messages found.";
+                ml.appendChild(mlli);
+            }
+        });
         var ta = document.getElementById('divFHIRdemo_textArea');
         ta.onkeyup = function (ev) {
             fhirDemo.toJSON(); // everytime a key is pressed
