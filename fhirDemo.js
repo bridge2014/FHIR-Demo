@@ -18,8 +18,8 @@ fhirDemo.toJSON = function () { // convert text area HL7 text into JSON
     var hl7_txt = document.getElementById('divFHIRdemo_textArea').value;
     var hl7_json = hl72json(hl7_txt);
     var div = document.getElementById('divFHIRdemo_JSON');
-    div.innerHTML = '<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre id="FHIRdemo_doc" style="color: green;">' + JSON.stringify(hl7_json, undefined, 1) + '</pre><button id="FHIRdemo_save_button">Save to FHIR</button>';
-    var saveBtn = document.getElementById("FHIRdemo_save_button");
+    div.innerHTML = '<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre id="FHIRdemo_doc" style="color: green;">' + JSON.stringify(hl7_json, undefined, 1) + '</pre>';
+    var saveBtn = document.getElementById("FHIRdemo_saveButton");
     saveBtn.onclick = function () {
         var doc = document.getElementById("FHIRdemo_doc").innerText;
         doc = JSON.parse(doc);
@@ -52,6 +52,10 @@ fhirDemo.UI = function () {
         var divUpload = document.createElement('div');
         div.appendChild(divUpload);
         jmat.inputFileTxt(upload, divUpload, '', 'accept=".hl7"');
+        var saveButton = document.createElement('button');
+        saveButton.id = 'FHIRdemo_saveButton';
+        saveButton.innerText = 'Save to FHIR';
+        div.appendChild(saveButton);
         var bt = document.getElementById('FHIRdemo_button');
         bt.onclick = function () { // "demo" button
             var ta = document.getElementById('divFHIRdemo_textArea');
