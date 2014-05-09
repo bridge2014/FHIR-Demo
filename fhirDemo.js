@@ -18,19 +18,13 @@ fhirDemo.toJSON = function () { // convert text area HL7 text into JSON
     var hl7_txt = document.getElementById('divFHIRdemo_textArea').value;
     var hl7_json = hl72json(hl7_txt);
     var div = document.getElementById('divFHIRdemo_JSON');
-    div.innerHTML = '<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre id="FHIRdemo_doc" style="color: green;">'+JSON.stringify(hl7_json, undefined, 1)+'</pre><button class="FHIRdemo_save_button" data-username="username1" data-password="username1">Save as username1</button><button class="FHIRdemo_save_button" data-username="username2" data-password="username2">Save as username2</button>';
-    var saveBtns = document.getElementsByClassName("FHIRdemo_save_button");
-    for (var saveBtnIdx = 0; saveBtnIdx < saveBtns.length; saveBtnIdx++) {
-        var saveBtn = saveBtns[saveBtnIdx];
-        var username = saveBtn.dataset.username;
-        var password = saveBtn.dataset.password;
-        fhir.credentials(username, password);
-        saveBtn.onclick = function () {
-            var doc = document.getElementById("FHIRdemo_doc").innerText;
-            doc = JSON.parse(doc);
-            fhirHl7Parser(doc);
-        };
-    }
+    div.innerHTML = '<hr>JSON (using <a href="https://github.com/ibl/FHIR-Demo/blob/gh-pages/hl72json.js" target=_blank>hl72json.js</a>)<pre id="FHIRdemo_doc" style="color: green;">' + JSON.stringify(hl7_json, undefined, 1) + '</pre><button id="FHIRdemo_save_button">Save to FHIR</button>';
+    var saveBtn = document.getElementById("FHIRdemo_save_button");
+    saveBtn.onclick = function () {
+        var doc = document.getElementById("FHIRdemo_doc").innerText;
+        doc = JSON.parse(doc);
+        fhirHl7Parser(doc);
+    };
 };
 
 fhirDemo.UI = function () {
@@ -43,31 +37,7 @@ fhirDemo.UI = function () {
         div0.appendChild(div);
         div.innerHTML = '<p style="color: navy;">Message list:</p><ul id="divFHIRdemo_messageList"></ul><p style="color: navy;">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color: red;">.hl7</i> file:</p>';
         div.innerHTML += '<textarea style="width: 100%; height: 200px; color: blue;" id="divFHIRdemo_textArea">';
-        var ml = document.getElementById('divFHIRdemo_messageList');
-        fhir.search({
-            _type: "MSH"
-        }, function (err, resources) {
-            var mlli;
-            if (resources.length > 0) {
-                resources.forEach(function (resource) {
-                    mlli = document.createElement("li");
-                    mlli.innerText = JSON.stringify(resource);
-                    mlli.onclick = function (evt) {
-                        var message = JSON.parse(evt.target.innerText);
-                        fhirJsonParser(message, function (err, m) {
-                            var ta = document.getElementById('divFHIRdemo_textArea');
-                            ta.value = m;
-                            fhirDemo.toJSON();
-                        });
-                    };
-                    ml.appendChild(mlli);
-                });
-            } else {
-                mlli = document.createElement("li");
-                mlli.innerText = "No messages found.";
-                ml.appendChild(mlli);
-            }
-        });
+        refreshMessageList();
         var ta = document.getElementById('divFHIRdemo_textArea');
         ta.onkeyup = function (ev) {
             fhirDemo.toJSON(); // everytime a key is pressed
@@ -96,7 +66,45 @@ fhirDemo.UI = function () {
         var divJSON = document.createElement('div');
         divJSON.id = "divFHIRdemo_JSON";
         div0.appendChild(divJSON);
+        // Setup user selector.
+        var userSelectors = document.querySelectorAll("#FHIRdemo_changeUser a");
+        for (var userSelectorIdx = 0; userSelectorIdx < userSelectors.length; userSelectorIdx++) {
+            userSelectors[userSelectorIdx].onclick = function (evt) {
+                fhir.credentials(evt.target.dataset.username, evt.target.dataset.password);
+                refreshMessageList();
+            };
+        }
     }
+};
+
+refreshMessageList = function () {
+    var ml = document.getElementById('divFHIRdemo_messageList');
+ // Clear list.
+    ml.innerHTML = "";
+    fhir.search({
+        _type: "MSH"
+    }, function (err, resources) {
+        var mlli;
+        if (resources.length > 0) {
+            resources.forEach(function (resource) {
+                mlli = document.createElement("li");
+                mlli.innerText = JSON.stringify(resource);
+                mlli.onclick = function (evt) {
+                    var message = JSON.parse(evt.target.innerText);
+                    fhirJsonParser(message, function (err, m) {
+                        var ta = document.getElementById('divFHIRdemo_textArea');
+                        ta.value = m;
+                        fhirDemo.toJSON();
+                    });
+                };
+                ml.appendChild(mlli);
+            });
+        } else {
+            mlli = document.createElement("li");
+            mlli.innerText = "No messages found.";
+            ml.appendChild(mlli);
+        }
+    });
 };
 
 fhirHl7Parser = function (obj) {
