@@ -23,7 +23,9 @@ fhirDemo.toJSON = function () { // convert text area HL7 text into JSON
     saveBtn.onclick = function () {
         var doc = document.getElementById("FHIRdemo_doc").innerText;
         doc = JSON.parse(doc);
-        fhirHl7Parser(doc);
+        fhirHl7Parser(doc, function () {
+            refreshMessageList();
+        });
     };
 };
 
@@ -107,7 +109,7 @@ refreshMessageList = function () {
     });
 };
 
-fhirHl7Parser = function (obj) {
+fhirHl7Parser = function (obj, callback) {
     var messageId;
  // Generate random message ID.
     messageId = Math.random().toString(36).substr(2, 9);
@@ -137,10 +139,11 @@ fhirHl7Parser = function (obj) {
         });
     }, function (err, res) {
         if (err) {
-            console.error("An error while persisting the HL7 document.");
+            console.error("An error occured while persisting the HL7 document.");
         } else {
             console.log("Documents were persisted:", res);
         }
+        callback();
     });
 };
 
