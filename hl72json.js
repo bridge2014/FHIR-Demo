@@ -9,7 +9,11 @@ console.log('hl72json.js :-)')
 
 hl72json=function(txt){
 	// regular parsing
-	txt = txt.split(/[\n\r]/).map(function(x){return x.split('|')});
+	txt = txt.split(/[\n\r]/).filter(function(x){
+		return x !== "";
+	}).map(function(x){
+		return x.split('|')
+	});
 	txt = txt.map(function(x){
 		var y = {};
 		y[x[0]] = x.slice(1);
