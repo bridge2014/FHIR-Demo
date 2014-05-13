@@ -37,7 +37,7 @@ fhirDemo.UI = function () {
         // input div
         var div = document.createElement('div');
         div0.appendChild(div);
-        div.innerHTML = '<p style="color: navy;">Message list:</p><ul id="divFHIRdemo_messageList"></ul><p style="color: navy;">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color: red;">.hl7</i> file:</p>';
+        div.innerHTML = '<p style="color: navy;">Message list: <span id="divFHIRdemo_messageList"></span></p><p style="color: navy;">Paste HL7 text message, use <button id="FHIRdemo_button">demo</button>, <button id="FHIRdemoZGOV_button">with ZGOV</button>, or load it from a <i style="color: red;">.hl7</i> file:</p>';
         div.innerHTML += '<textarea style="width: 100%; height: 200px; color: blue;" id="divFHIRdemo_textArea">';
         refreshMessageList();
         var ta = document.getElementById('divFHIRdemo_textArea');
@@ -92,9 +92,6 @@ refreshMessageList = function () {
     }, function (err, resources) {
         var mlli;
         if (resources.length > 0) {
-            var sep0 = document.createElement("span");
-            sep0.innerText = " | ";
-            ml.appendChild(sep0);
             resources.forEach(function (resource) {
                 mlli = document.createElement("span");
                 mlli.dataset.segment = JSON.stringify(resource);
@@ -109,10 +106,11 @@ refreshMessageList = function () {
                     });
                 };
                 var sep = document.createElement("span");
-                sep.innerText = " | ";
+                sep.innerText = ", ";
                 ml.appendChild(mlli);
                 ml.appendChild(sep);
             });
+            ml.lastChild.innerText=".";
         } else {
             mlli = document.createElement("li");
             mlli.innerText = "No messages found.";
