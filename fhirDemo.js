@@ -114,8 +114,9 @@ refreshMessageList = function () {
             });
             ml.lastChild.innerText=".";
         } else {
-            mlli = document.createElement("li");
-            mlli.innerText = "No messages found.";
+            mlli = document.createElement("span");
+            mlli.innerText = " No messages found, you can add your own, with your own ZGOV/@gov governance.";
+            mlli.style.color="green";
             ml.appendChild(mlli);
         }
     });
