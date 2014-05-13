@@ -77,6 +77,7 @@ fhirDemo.UI = function () {
         for (var userSelectorIdx = 0; userSelectorIdx < userSelectors.length; userSelectorIdx++) {
             userSelectors[userSelectorIdx].onclick = function (evt) {
                 fhir.credentials(evt.target.dataset.username, evt.target.dataset.password);
+                //refreshMessageList.userName=evt.target.dataset.username;
                 refreshMessageList();
             };
         }
@@ -84,6 +85,7 @@ fhirDemo.UI = function () {
 };
 
 refreshMessageList = function () {
+    document.getElementById('userSelected').innerText='('+fhir.auth.split(':')[0]+')';
     var ml = document.getElementById('divFHIRdemo_messageList');
  // Clear list.
     ml.innerHTML = "";
