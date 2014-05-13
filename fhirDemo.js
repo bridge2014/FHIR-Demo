@@ -95,7 +95,8 @@ refreshMessageList = function () {
             resources.forEach(function (resource) {
                 mlli = document.createElement("span");
                 mlli.dataset.segment = JSON.stringify(resource);
-                mlli.innerHTML = ' [<span style="color:blue">'+resource.mshid+'</span>] ';
+                mlli.innerText = resource.mshid;
+                mlli.style.color="blue";
                 mlli.onclick = function (evt) {
                     var message = JSON.parse(evt.target.dataset.segment);
                     fhirJsonParser(message, function (err, m) {
@@ -104,7 +105,10 @@ refreshMessageList = function () {
                         fhirDemo.toJSON();
                     });
                 };
+                var sep = document.createElement("span");
+                sep.innerText = " | ";
                 ml.appendChild(mlli);
+                ml.appendChild(sep);
             });
         } else {
             mlli = document.createElement("li");
