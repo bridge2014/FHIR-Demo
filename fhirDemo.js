@@ -93,9 +93,9 @@ refreshMessageList = function () {
         var mlli;
         if (resources.length > 0) {
             resources.forEach(function (resource) {
-                mlli = document.createElement("li");
+                mlli = document.createElement("span");
                 mlli.dataset.segment = JSON.stringify(resource);
-                mlli.innerText = resource.mshid;
+                mlli.innerText = " ["+resource.mshid+"] ";
                 mlli.onclick = function (evt) {
                     var message = JSON.parse(evt.target.dataset.segment);
                     fhirJsonParser(message, function (err, m) {
