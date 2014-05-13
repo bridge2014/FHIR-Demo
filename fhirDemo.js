@@ -92,6 +92,9 @@ refreshMessageList = function () {
     }, function (err, resources) {
         var mlli;
         if (resources.length > 0) {
+            var sep = document.createElement("span");
+            sep.innerText = " | ";
+            ml.appendChild(sep);
             resources.forEach(function (resource) {
                 mlli = document.createElement("span");
                 mlli.dataset.segment = JSON.stringify(resource);
@@ -105,8 +108,6 @@ refreshMessageList = function () {
                         fhirDemo.toJSON();
                     });
                 };
-                var sep = document.createElement("span");
-                sep.innerText = " | ";
                 ml.appendChild(mlli);
                 ml.appendChild(sep);
             });
