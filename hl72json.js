@@ -16,14 +16,20 @@ hl72json=function(txt){
 	});
 	txt = txt.map(function(x){
 		var y = {};
-		y[x[0]] = x.slice(1);
+		y[x[0]] = x.slice(1).map(function(xi){
+			if(xi.match(/^[^\^]+\^/)){
+				xi=xi.split('^');
+			}
+			return xi
+		});
 		return y;
 	})
 	// look for ZGOV segments and associate them to the preceding segment object
 	for(i=txt.length-1 ; i>0 ; i--){
 		if(Object.getOwnPropertyNames(txt[i])[0]==="ZGOV"){
 			txt[i].ZGOV = txt[i].ZGOV.map(function(z){
-				z = z.split('^');
+				//z = z.split('^');
+				if(typeof(z)=='string'){z=[z,'','']}
 				return {
 					operator:z[0],
 					username:z[1],
